@@ -1,3 +1,5 @@
+// 코드보니깐 dotenv를 import해서 config함수를 실행해줌
+import "dotenv/config";
 import "./db";
 import "./models/User";
 import "./models/Video";
