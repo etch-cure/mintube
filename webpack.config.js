@@ -2,7 +2,10 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 
 module.exports = {
-  entry: "./src/client/js/main.js",
+  entry: {
+    main: "./src/client/js/main.js",
+    videoPlayer: "./src/client/js/videoPlayer.js",
+  },
   mode: "development",
   // 코드 바뀔때 자동으로 다시빌드
   watch: true,
@@ -12,7 +15,8 @@ module.exports = {
     }),
   ],
   output: {
-    filename: "js/main.js",
+    // [name] => entry의 key값
+    filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),
     // 지우고 다시 빌드
     clean: true,

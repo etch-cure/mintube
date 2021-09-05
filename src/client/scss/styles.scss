@@ -1,3 +1,7 @@
+// Config
+@import "./config/_variables.scss";
+@import "./config/_reset.scss";
+
 // Components
 
 @import "./components/header.scss";
@@ -6,6 +10,7 @@
 @import "./components/shared.scss";
 @import "./components/forms.scss";
 @import "./components/social-login.scss";
+@import "./components/video-player.scss";
 
 // Screens
 
