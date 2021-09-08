@@ -1,3 +1,4 @@
+import normalize from 'normalize-path'
 import Video from "../models/Video";
 import User from "../models/User";
 
@@ -58,13 +59,14 @@ export const postUpload = async (req, res) => {
   const {
     user: { _id },
   } = req.session;
-  const { path: fileUrl } = req.file;
+  const { video, thumb } = req.files;
   const { title, description, hashtags } = req.body;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl,
+      fileUrl: normalize(video[0].path),
+      thumbUrl: normalize(thumb[0].path),
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import normalize from 'normalize-path'
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
@@ -166,7 +167,7 @@ export const postEdit = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       _id,
       {
-        avatarUrl: file ? file.path : avatarUrl,
+        avatarUrl: file ? normalize(file.path) : avatarUrl,
         name,
         email,
         username,
