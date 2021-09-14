@@ -18,6 +18,7 @@
 @import "./screens/profile.scss";
 @import "./screens/edit-profile.scss";
 @import "./screens/upload.scss";
+@import "./screens/watch.scss";
 
 // Defaults
 a {
@@ -50,7 +51,8 @@ main {
 }
 
 .message {
-  position: absolute;
+  position: sticky;
+  z-index: 100;
   top: 10px;
   left: 0;
   right: 0;
