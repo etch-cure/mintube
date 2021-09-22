@@ -171,10 +171,11 @@ export const postEdit = async (req, res) => {
       errorMessage
     });
   } else {
+    const isProduction = process.env.NODE_ENV === 'production'
     const updatedUser = await User.findByIdAndUpdate(
       _id,
       {
-        avatarUrl: file ? normalize(file.path) : avatarUrl,
+        avatarUrl: file ? (isProduction ? file.location : normalize(file.path)) : avatarUrl,
         name,
         email,
         username,

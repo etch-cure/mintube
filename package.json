@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "node build/init.js",
+    "build": "npm run build:server && npm run build:assets",
+    "build:server": "babel src -d build --ignore src/client",
+    "build:assets": "webpack --mode=production",
     "dev:server": "nodemon",
-    "dev:assets": "webpack"
+    "dev:assets": "webpack --mode=development -w"
   },
   "repository": {
     "type": "git",
@@ -19,6 +23,7 @@
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
+    "aws-sdk": "^2.992.0",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.5.0",
     "dotenv": "^10.0.0",
@@ -29,13 +34,15 @@
     "mongoose": "^5.13.7",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
+    "multer-s3": "^2.9.0",
     "node-fetch": "^2.6.1",
     "normalize-path": "^3.0.0",
     "pug": "^3.0.2",
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
     "@babel/node": "^7.13.10",
     "@babel/preset-env": "^7.15.0",
     "babel-loader": "^8.2.2",
