@@ -4,7 +4,7 @@ block content
     //- data 어트리뷰트
     //- https://developer.mozilla.org/ko/docs/Learn/HTML/Howto/Use_data_attributes
     div#videoContainer(data-id=video._id)
-        video(src="/" + video.fileUrl)
+        video(src=`${isProduction ? video.fileUrl : "/" + video.fileUrl}`)
         div#videoControls.videoControls
             div.videoControls__play
                 span#play.videoControls__playBtn
