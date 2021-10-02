@@ -7,17 +7,22 @@ block content
         span 😀
     else
         if loggedInUser.avatarUrl
-            if loggedInUser.avatarUrl.startsWith("http")
-                img(src=loggedInUser.avatarUrl)
-            else
-                img(src="/" + loggedInUser.avatarUrl)
+            div.profile__data
+                if loggedInUser.avatarUrl.startsWith("http")
+                    img(src=loggedInUser.avatarUrl).avatar
+                else
+                    img(src="/" + loggedInUser.avatarUrl).avatar
     form(method="POST", enctype="multipart/form-data").edit-profile__form
         label(for="avatar") Avatar
         input(type="file", id="avatar", name="avatar", accept="image/*")
-        input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
-        input(placeholder="Email", name="email", type="email", required, value=loggedInUser.email)
-        input(placeholder="Username", name="username", type="text", required, value=loggedInUser.username)
-        input(placeholder="Location", name="location", type="text", required, value=loggedInUser.location)
+        label(for="name") Name
+        input(placeholder="Name", id="name", name="name", type="text", required, value=loggedInUser.name)
+        label(for="email") Email
+        input(placeholder="Email", id="email", name="email", type="email", required, value=loggedInUser.email)
+        label(for="username") UserName
+        input(placeholder="Username", id="username", name="username", type="text", required, value=loggedInUser.username)
+        label(for="location") Location
+        input(placeholder="Location", id="location", name="location", type="text", required, value=loggedInUser.location)
         input(type="submit", value="Update Profile")
         if !loggedInUser.socialOnly
             div.edit-profile__password

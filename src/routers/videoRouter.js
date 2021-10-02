@@ -6,6 +6,7 @@ import {
   postEdit,
   postUpload,
   deleteVideo,
+  getRecorder
 } from "../controllers/videoController";
 import { protectorMiddleware, videoUpload } from "../middlewares";
 const videoRouter = express.Router();
@@ -25,5 +26,14 @@ videoRouter
   .all(protectorMiddleware)
   .get(getUpload)
   .post(videoUpload.fields([{ name: "video" }, { name: "thumb" }]), postUpload);
+videoRouter
+  .route("/recorder")
+  .all((req, res, next) => {
+    res.header("Cross-Origin-Embedder-Policy", "require-corp");
+    res.header("Cross-Origin-Opener-Policy", "same-origin");
+    next();
+  })
+  .all(protectorMiddleware)
+  .get(getRecorder)
 
 export default videoRouter;

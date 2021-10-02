@@ -19,6 +19,7 @@
 @import "./screens/edit-profile.scss";
 @import "./screens/upload.scss";
 @import "./screens/watch.scss";
+@import "./screens/recorder.scss";
 
 // Defaults
 a {
@@ -45,24 +46,25 @@ main {
     opacity: 1;
   }
   to {
-    transform: translateY(-50px);
+    transform: translateY(-100%);
     opacity: 0;
   }
 }
 
 .message {
-  position: sticky;
+  position: fixed;
   z-index: 100;
   top: 10px;
   left: 0;
   right: 0;
   margin: 0 auto;
-  max-width: 200px;
+  line-height: 1.5;
+  max-width: 300px;
   padding: 10px 20px;
   border-radius: 10000px;
   text-align: center;
   animation: goAway 0.5s ease-in-out forwards;
-  animation-delay: 1s;
+  animation-delay: 3s;
   &.error {
     background-color: tomato;
     color: white;
@@ -71,7 +73,7 @@ main {
     background-color: DarkGreen;
     color: white;
   }
-  &.sucess {
+  &.success {
     background-color: DeepSkyBlue;
     color: white;
   }

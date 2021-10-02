@@ -1,3 +1,4 @@
+extends base.pug
 include mixins/video
 
 block content
@@ -5,6 +6,7 @@ block content
         input(placeholder="Search by title",name="keyword", type="text")
         button
             i.fas.fa-search
+
     div.video-grid
         each video in videos 
             +video(video)

@@ -1,6 +1,11 @@
 form {
   max-width: 420px;
   margin: 0 auto;
+  label {
+    font-size: 14px;
+    margin: 20px 0px 10px;
+    display: block;
+  }
   &:not(.search__form) {
     padding: 30px;
     background-color: rgba($color: $bg, $alpha: 0.7);
@@ -9,8 +14,7 @@ form {
   }
 }
 
-input:not(input[type="range"]),
-input[type="submit"] {
+input:not([type="range"]):not([type="radio"]):not([type="number"]) {
   all: unset;
   padding: 15px 20px;
   border-radius: 5px;
@@ -32,7 +36,7 @@ input[type="submit"],
   background-color: white !important;
   color: rgba($color: $red, $alpha: 1) !important;
   text-align: center !important;
-  cursor: pointer;
+  cursor: pointer !important;
   display: block;
   border: none;
   &:focus {

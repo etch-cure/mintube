@@ -1,8 +1,9 @@
-form {
-  label {
-    font-size: 14px;
-    margin-bottom: 10px;
-    display: block;
+.edit-profile__form {
+  label:first-child {
+    margin-top: 0px;
+  }
+  input:last-child {
+    margin-top: 20px;
   }
 }
 

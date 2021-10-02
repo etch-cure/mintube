@@ -1,13 +1,15 @@
 .upload__container {
   width: 100%;
-  .upload__video {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    video {
-      max-width: 100%;
-      margin-bottom: 10px;
+  .upload__video__info__form {
+    label:first-child {
+      margin-top: 0px;
     }
+    input:last-child {
+      margin-top: 20px;
+    }
+  }
+  .go__video__recorder {
+    width: fit-content;
+    margin: 0px auto 20px;
   }
 }

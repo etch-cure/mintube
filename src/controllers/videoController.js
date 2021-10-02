@@ -2,6 +2,7 @@ import normalize from 'normalize-path'
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import User from "../models/User";
+import { async } from 'regenerator-runtime';
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -173,4 +174,8 @@ export const deleteComment = async (req, res) => {
   video.save();
   req.session.user = user;
   return res.sendStatus(200)
+}
+
+export const getRecorder = async (req, res) => {
+  return res.render("recorder", { pageTitle: "Record Video" });
 }

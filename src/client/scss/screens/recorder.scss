@@ -1,0 +1,33 @@
+.recorder__container {
+  width: 100%;
+  >.recorder__video {
+    padding: 30px;
+    margin: 10px;
+    background-color: rgba($color: $bg, $alpha: 0.7);
+    border-radius: 10px;
+    border: 1px solid rgba($color: #fff, $alpha: 0.1);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    video {
+      border: 1px solid gray;
+      max-width: 100%;
+    }
+    > * {
+      margin: 10px 0px;
+    }
+    > *:first-child {
+      margin-top: 0px;
+    }
+    > *:last-child {
+      margin-bottom: 0px;
+    }
+    #record-time {
+      margin-left: 5px;
+    }
+  }
+
+  .recorder__select__record {
+    margin-top: 5px;
+  }
+}

@@ -1,13 +1,10 @@
 .video__data {
-  margin-top: 20px;
+  margin: 20px 10px;
   display: flex;
   flex-direction: column;
   .video__title {
     font-size: 26px;
     margin-bottom: 5px;
-  }
-  .video__createdAt {
-    font-size: 12px;
   }
   .video__owner {
     margin-bottom: 5px;
@@ -17,7 +14,52 @@
       text-decoration: underline;
     }
   }
+
+  .video_edit,
+  .video_delete {
+    align-self: flex-end;
+    height: 39px;
+    line-height: 39px;
+    margin-top: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 0;
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
 }
+
+.video__comment-form {
+  .video__comment_input {
+    background-color: transparent;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    width: 100%;
+    resize: none;
+    outline: none;
+    height: 20px;
+    line-height: 20px;
+    transition: border-color 0.5s;
+    color: whitesmoke;
+    &:focus {
+      border-color: hotpink;
+    }
+  }
+  > div {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 39px;
+    margin-top: 8px;
+
+    > button {
+      color: whitesmoke;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 0;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}
+
 .video__comments {
   display: flex;
   flex-direction: column;

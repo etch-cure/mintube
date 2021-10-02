@@ -1,6 +1,10 @@
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
+import { showMsg } from "./msgComponent.js"
 const actionBtn = document.getElementById("actionBtn");
 const video = document.getElementById("preview");
+const recordTime = document.getElementById("record-time");
+const recordScreen = document.getElementById("record-screen");
+const recordCamera = document.getElementById("record-camera");
 
 let stream;
 let recorder;
@@ -25,62 +29,79 @@ const handleDownload = async () => {
   actionBtn.innerText = "Transcoding...";
   actionBtn.disabled = true;
 
-  // ffmpeg 로드
-  const ffmpeg = createFFmpeg({
-    corePath: '/ffmpeg/ffmpeg-core.js',
-    log: true,
-  });
-  await ffmpeg.load();
-
-  // videoFile데이터를 ffmpeg에 쓰기(로드)
-  ffmpeg.FS("writeFile", files.input, await fetchFile(videoFile));
-
-  // 로드한 파일을 60프레임의 mp4파일로 변경
-  await ffmpeg.run("-i", files.input, "-r", "60", files.output);
-
-  // 썸네일 생성
-  await ffmpeg.run(
-    "-i",
-    files.input,
-    "-ss",
-    "00:00:01",
-    "-frames:v",
-    "1",
-    files.thumb
-  );
-
-  // 변경한 파일을 Uint8Array 로 변경
-  const mp4File = ffmpeg.FS("readFile", files.output);
-  const thumbFile = ffmpeg.FS("readFile", files.thumb);
-
-  // 블롭 만들기
-  const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
-  const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
-
-  // 가짜 url 만들기
-  const mp4Url = URL.createObjectURL(mp4Blob);
-  const thumbUrl = URL.createObjectURL(thumbBlob);
-
-  downloadFile(mp4Url, "MyRecording.mp4");
-  downloadFile(thumbUrl, "MyThumbnail.jpg");
+  try {
+    // ffmpeg 로드
+    const ffmpeg = createFFmpeg({
+      corePath: '/ffmpeg/ffmpeg-core.js',
+      log: true,
+    });
+    await ffmpeg.load();
   
-  ffmpeg.FS("unlink", files.input);
-  ffmpeg.FS("unlink", files.output);
-  ffmpeg.FS("unlink", files.thumb);
-
-  URL.revokeObjectURL(mp4Url);
-  URL.revokeObjectURL(thumbUrl);
-  URL.revokeObjectURL(videoFile);
+    // videoFile데이터를 ffmpeg에 쓰기(로드)
+    ffmpeg.FS("writeFile", files.input, await fetchFile(videoFile));
+  
+    // 로드한 파일을 60프레임의 mp4파일로 변경
+    await ffmpeg.run("-i", files.input, "-r", "60", files.output);
+  
+    // 썸네일 생성
+    await ffmpeg.run(
+      "-i",
+      files.input,
+      "-ss",
+      "00:00:01",
+      "-frames:v",
+      "1",
+      files.thumb
+    );
+  
+    // 변경한 파일을 Uint8Array 로 변경
+    const mp4File = ffmpeg.FS("readFile", files.output);
+    const thumbFile = ffmpeg.FS("readFile", files.thumb);
+  
+    // 블롭 만들기
+    const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
+    const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
+  
+    // 가짜 url 만들기
+    const mp4Url = URL.createObjectURL(mp4Blob);
+    const thumbUrl = URL.createObjectURL(thumbBlob);
+  
+    downloadFile(mp4Url, "MyRecording.mp4");
+    downloadFile(thumbUrl, "MyThumbnail.jpg");
+    
+    ffmpeg.FS("unlink", files.input);
+    ffmpeg.FS("unlink", files.output);
+    ffmpeg.FS("unlink", files.thumb);
+  
+    URL.revokeObjectURL(mp4Url);
+    URL.revokeObjectURL(thumbUrl);
+    URL.revokeObjectURL(videoFile);
+  
+    showMsg('녹화 및 파일 변환에 성공했습니다. 다운로드를 확인해주세요.', 'success');
+  }
+  catch (error) {
+    showMsg('녹화 혹은 파일 변환에 실패했습니다. 다운로드를 확인해주세요.', 'error');
+  }
 
   actionBtn.disabled = false;
   actionBtn.innerText = "Record Again";
-  actionBtn.addEventListener("click", handleStart);
+  actionBtn.onclick = handleStart;
 };
 
 const handleStart = () => {
+  if (stream === null || stream === undefined) {
+    showMsg('선택한 레코딩 미디어가 없습니다.', 'error');
+    throw new Error ('선택한 레코딩 미디어가 없습니다.');
+  }
+  const recordingTime = parseInt(recordTime.value);
+  if (recordingTime === NaN || recordingTime < 2) {
+    showMsg('레코딩 시간이 잘못 되었습니다. 2초 이상 입력해주세요', 'error');
+    recordTime.value = 2;
+    throw new Error('레코딩 시간이 잘못 되었습니다.');
+  }
   actionBtn.innerText = "Recording";
   actionBtn.disabled = true;
-  actionBtn.removeEventListener("click", handleStart);
+
   recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
   // data를 이용할수 있을때 발생하는 이벤트 (stop한 이후에도 발생)
   recorder.ondataavailable = (event) => {
@@ -94,15 +115,23 @@ const handleStart = () => {
     video.play();
     actionBtn.innerText = "Download";
     actionBtn.disabled = false;
-    actionBtn.addEventListener("click", handleDownload);
+    actionBtn.onclick = handleDownload;
   };
-  recorder.start();
+
+  try {
+    recorder.start();
+  } catch (error) {
+    showMsg('녹화할 미디어를 찾지 못하였습니다. 녹화할 미디어를 선택해주세요.', 'error');
+    actionBtn.disabled = false;
+    actionBtn.innerText = "Start Recording";
+    actionBtn.onclick = handleStart;
+  }
   setTimeout(() => {
     recorder.stop();
-  }, 5000);
+  }, recordingTime * 1000);
 };
 
-const init = async () => {
+const handleSelectScreen = async () => {
   try {
     stream = await navigator.mediaDevices.getDisplayMedia({
       audio: true,
@@ -113,17 +142,35 @@ const init = async () => {
     });
     video.srcObject = stream;
     video.play();
-    // stream = await navigator.mediaDevices.getUserMedia({
-    //   audio: true,
-    //   video: true,
-    // });
-    // video.srcObject = stream;
-    // video.play();
+    actionBtn.disabled = false;
+    actionBtn.innerText = "Start Recording";
   } catch (error) {
-    alert('디스플레이 미디어를 찾지 못하였습니다.')
+    actionBtn.disabled = true;
+    actionBtn.innerText = "Select Recorder";
+    showMsg('녹화할 미디어를 찾지 못하였습니다. 녹화할 미디어를 선택해주세요.', 'error');
   }
+  actionBtn.onclick = handleStart;
 };
 
-init()
+const handleSelectCamera = async () => {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
+    video.srcObject = stream;
+    video.play();
+    actionBtn.disabled = false;
+    actionBtn.innerText = "Start Recording";
+  } catch (error) {
+    actionBtn.disabled = true;
+    actionBtn.innerText = "Select Recorder";
+    showMsg('녹화할 미디어를 찾지 못하였습니다. 녹화할 미디어를 선택해주세요.', 'error');
+  }
+  actionBtn.onclick = handleStart;
+};
 
-actionBtn.addEventListener("click", handleStart);
+recordScreen.addEventListener("click", handleSelectScreen);
+recordCamera.addEventListener("click", handleSelectCamera);
+
+handleSelectScreen();

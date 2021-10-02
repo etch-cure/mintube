@@ -101,10 +101,47 @@ const handleMouseLeave = () => {
 };
 
 const handleEnded = () => {
+  playBtnIcon.classList = "fas fa-play";
   const { id } = videoContainer.dataset;
   fetch(`/api/videos/${id}/view`, {
     method: "POST",
   });
+};
+
+const handleVideoShortCuts = (event) => {
+  if (event.target instanceof HTMLTextAreaElement === false) {
+    switch (event.code) {
+      case 'KeyF':
+        handleFullscreen();
+        event.preventDefault();
+        break;
+      case 'KeyK':
+      case 'Space':
+        handlePlayClick();
+        event.preventDefault();
+        break;
+      case 'KeyM':
+        handleMuteClick();
+        event.preventDefault();
+        break;
+      case 'ArrowUp':
+        handleVolumeChange({ target: { value: volumeValue + 5 } });
+        event.preventDefault();
+        break;
+      case 'ArrowDown':
+        handleVolumeChange({ target: { value: volumeValue - 5 } });
+        event.preventDefault();
+        break;
+      case 'ArrowRight':
+        handleTimelineChange({ target: { value: video.currentTime + 5000 } });
+        event.preventDefault();
+        break;
+      case 'ArrowLeft':
+        handleTimelineChange({ target: { value: video.currentTime - 5000 } });
+        event.preventDefault();
+        break;
+    }
+  }
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -117,3 +154,5 @@ videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
+
+document.addEventListener("keydown", handleVideoShortCuts)

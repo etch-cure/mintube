@@ -1,0 +1,19 @@
+extends base.pug
+
+block content
+    div.recorder__container
+        div.recorder__video
+            label Video Recorder
+            video#preview(muted)
+            label(for="record-time") Record Time (second)
+                input#record-time(type="number", value="5", min="1", max="300")
+            label Select Record Media
+                div.recorder__select__record
+                    input#record-screen(type="radio", name="recordMedia", checked)
+                    label(for="record-screen") Record the screen
+                    input#record-camera(type="radio", name="recordMedia")
+                    label(for="record-camera") Record the camera
+            button#actionBtn.social__btn Start Recording
+
+block scripts
+    script(src="/static/js/recorder.js")
