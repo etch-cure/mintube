@@ -155,4 +155,8 @@ videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
 
-document.addEventListener("keydown", handleVideoShortCuts)
+document.addEventListener("keydown", handleVideoShortCuts);
+
+if(video.readyState >= 2) {
+  handleLoadedMetadata();
+}

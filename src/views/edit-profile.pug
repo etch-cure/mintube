@@ -1,8 +1,6 @@
 extends base
 
 block content
-    if errorMessage
-        span=errorMessage
     if loggedInUser.avatarUrl === ""
         span 😀
     else
